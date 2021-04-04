@@ -4,9 +4,9 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define L1Time 19
-#define L2Time 23
-#define L3Time 33
+#define L1Time 15
+#define L2Time 20
+#define L3Time 26
 
 SceneID scene[5];
 ObjectID start, gunsletter,notice,soundstick,message,home,change1,change2;
@@ -60,7 +60,7 @@ void gamestart(int SceneNumber, int x, int y, int index, TimerID timer) {
 
 //1단계 종료 함수
 void checkend1() {
-    if (score == 49 || count2 == 49) {
+    if (score == 39 || count2 == 39) {
         enterScene(scene[1]);
         if (clearC[0] == 0) {
             showMessage(L1);
@@ -86,7 +86,7 @@ void checkend1() {
 
 //2단계 종료 함수
 void checkend2() {
-    if (score == 49 || count2 == 49) {
+    if (score == 39 || count2 == 39) {
         enterScene(scene[1]);
         if (clearC[1] == 0) {
             showMessage(L2);
@@ -112,7 +112,7 @@ void checkend2() {
 
 //3단계 종료 함수
 void checkend3() {
-    if (score == 49 || count2 == 49) {
+    if (score == 39 || count2 == 39) {
         enterScene(scene[1]);
         if (clearC[2] == 0) {
             showMessage(L3);
