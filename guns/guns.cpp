@@ -9,7 +9,7 @@
 #define L3Time 26
 
 SceneID scene[5];
-ObjectID start, gunsletter,notice,soundstick,message,home,change1,change2;
+ObjectID start, gunsletter,notice,soundstick,message,home,change1,change2,telling;
 ObjectID level[3], target[3], background[3];
 TimerID timer1, timer2, timer3, timer4, timer5;
 SoundID fire, fire2, unfire, changed, BGM;
@@ -257,6 +257,9 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
     if (object == change2) {
         modeChange(2);
     }
+    if (object == telling) {
+        hideObject(telling);
+    }
 }
 
 //사운드 콜백 함수
@@ -356,6 +359,7 @@ int main()
     change2 = createObject("countmode.png", scene[1], 1150, 600, false);
 
     message = createObject("message.png", scene[1], 0, 0, false);
+    telling = createObject("telling.png", scene[0], 0, 0, true);
 
     //사운드 생성
     fire = createSound2("fire.mp3", false);
