@@ -15,13 +15,9 @@ ObjectID level[3], target[3], background[3];
 TimerID timer1, timer2, timer3, timer4, timer5;
 SoundID fire, fire2, unfire, changed, BGM;
 Second count2 = 0;
-int x_pos[3] = { 0,0,0 };
-int y_pos[3] = { 0,0,0 };
-int score = 0;
-int clearC[3] = { 0,0,0 };
-int time2 = 0;
+int x_pos[3] = { 0,0,0 }, y_pos[3] = { 0,0,0 }, clearC[3] = { 0,0,0 };
+int score = 0, time2 =0, changeNum = 0;
 char L1[256],L2[256],L3[256],T[256],TIMEOUT[256];
-int changeNum = 0;
 
 //소리 생성 함수
 SoundID createSound2(const char* sound, bool que) {
