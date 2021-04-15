@@ -4,9 +4,10 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define L1Time 15
-#define L2Time 20
-#define L3Time 26
+#define L1Time 14
+#define L2Time 15
+#define L3Time 21
+#define endCount 34
 
 SceneID scene[5];
 ObjectID start, gunsletter,notice,soundstick,message,home,change1,change2,telling;
@@ -19,7 +20,7 @@ int y_pos[3] = { 0,0,0 };
 int score = 0;
 int clearC[3] = { 0,0,0 };
 int time2 = 0;
-char L1[256],L2[256],L3[256],T[256];
+char L1[256],L2[256],L3[256],T[256],TIMEOUT[256];
 int changeNum = 0;
 
 //소리 생성 함수
@@ -60,7 +61,7 @@ void gamestart(int SceneNumber, int x, int y, int index, TimerID timer) {
 
 //1단계 종료 함수
 void checkend1() {
-    if (score == 39 || count2 == 39) {
+    if (score == endCount || count2 == endCount) {
         enterScene(scene[1]);
         if (clearC[0] == 0) {
             showMessage(L1);
@@ -86,7 +87,7 @@ void checkend1() {
 
 //2단계 종료 함수
 void checkend2() {
-    if (score == 39 || count2 == 39) {
+    if (score == endCount || count2 == endCount) {
         enterScene(scene[1]);
         if (clearC[1] == 0) {
             showMessage(L2);
@@ -112,7 +113,7 @@ void checkend2() {
 
 //3단계 종료 함수
 void checkend3() {
-    if (score == 39 || count2 == 39) {
+    if (score == endCount || count2 == endCount) {
         enterScene(scene[1]);
         if (clearC[2] == 0) {
             showMessage(L3);
@@ -141,6 +142,7 @@ void endMessage() {
     sprintf(L2, "총 %d초가 걸렸습니다!\n 3단계가 열렸습니다!", time2);
     sprintf(L3, "총 %d초가 걸렸습니다!\n 축하합니다! 모두 클리어 하셨습니다!", time2);
     sprintf(T, "총 %d초가 걸렸습니다!", time2);
+    sprintf(TIMEOUT, "시간이 초과됐습니다.\n%d개의 표적을 맞췄습니다", score);
 }
 
 //감점 함수
@@ -193,7 +195,7 @@ void Timeover(TimerID timer, int sec) {
     hideTimer();
     setTimer(timer, sec);
     stopTimer(timer);
-    showMessage("시간이 초과되었습니다.");
+    showMessage(TIMEOUT);
     playSound(BGM);
     showObject(message);
     setTimer(timer5, 0);
@@ -259,6 +261,9 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
     }
     if (object == telling) {
         hideObject(telling);
+    }
+    if (object == start) {
+        showMessage("표적은 총 35개를 맞추셔야 합니다!");
     }
 }
 
