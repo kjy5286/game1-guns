@@ -263,7 +263,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
         hideObject(telling);
     }
     if (object == start) {
-        showMessage("표적은 총 35개를 맞추셔야 합니다!");
+        showMessage("게임 전 README 파일을 꼭 참고해주세요!");
     }
 }
 
