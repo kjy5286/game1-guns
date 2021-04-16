@@ -295,18 +295,8 @@ ObjectID createObject(const char* image, SceneID scene, int x, int y, bool shown
     return object;
 }
 
-//메인 함수
-int main()
-{
-    //인벤토리와 메세지 상자 삭제
-    setGameOption(GameOption::GAME_OPTION_INVENTORY_BUTTON, false);
-    setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
-
-    //콜백함수 호출
-    setMouseCallback(mouseCallback);
-    setTimerCallback(timerCallback);
-    setSoundCallback(soundCallback);
-
+//게임 최초 실행 함수
+void gameInit() {
     //랜덤함수의 시간 시드
     srand(time(NULL));
 
@@ -326,7 +316,7 @@ int main()
 
     //배경을 오브젝트로 생성
     home = createObject("guns.jpg", scene[1], 0, 0, true);
-    
+
     for (int i = 0; i < 3; i++) {
         background[i] = createObject("guns3.png", scene[i + 2], 0, 0, true);
     }
@@ -364,6 +354,22 @@ int main()
     unfire = createSound2("unfire.mp3", false);
     changed = createSound2("changed.mp3", false);
     BGM = createSound2("Sinking.mp3", true);
+}
+
+//메인 함수
+int main()
+{
+    //인벤토리와 메세지 상자 삭제
+    setGameOption(GameOption::GAME_OPTION_INVENTORY_BUTTON, false);
+    setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
+
+    //콜백함수 호출
+    setMouseCallback(mouseCallback);
+    setTimerCallback(timerCallback);
+    setSoundCallback(soundCallback);
+
+    //오브젝트, 사운드, 타이머 생성 
+    gameInit();
 
     startGame(scene[0]);
 }
