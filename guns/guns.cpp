@@ -138,7 +138,7 @@ void endMessage() {
     sprintf(L2, "총 %d초가 걸렸습니다!\n 3단계가 열렸습니다!", time2);
     sprintf(L3, "총 %d초가 걸렸습니다!\n 축하합니다! 모두 클리어 하셨습니다!", time2);
     sprintf(T, "총 %d초가 걸렸습니다!", time2);
-    sprintf(TIMEOUT, "시간이 초과됐습니다.\n%d개의 표적을 맞췄습니다", score);
+    sprintf(TIMEOUT, "시간이 초과됐습니다.\n총 %d점을 획득했습니다.", score);
 }
 
 //감점 함수
