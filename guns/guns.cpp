@@ -233,14 +233,10 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
         movetarget(4, 2, 1240, 680);
         playSound(fire);
     }
-    if (object == background[0]) {
-        subtractPoint();
-    }
-    if (object == background[1]) {
-        subtractPoint();
-    }
-    if (object == background[2]) {
-        subtractPoint();
+    for (int i = 0; i < 3; i++) {
+        if (object == background[i]) {
+            subtractPoint();
+        }
     }
     if (object == soundstick) {
         playSound(fire);
