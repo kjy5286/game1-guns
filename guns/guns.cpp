@@ -322,7 +322,7 @@ void gameInit() {
     }
 
     //주요 오브젝트 생성
-    gunsletter = createObject("guns2.png", scene[0], 370, 500, true);
+    gunsletter = createObject("guns2.png", scene[0], 400, 500, true);
     start = createObject("start.png", scene[0], 510, 70, true);
     scaleObject(start, 0.3f);
 
