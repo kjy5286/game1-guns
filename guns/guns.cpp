@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #define L1Time 14
-#define L2Time 15
+#define L2Time 16
 #define L3Time 21
 #define endCount 34
 
