@@ -10,13 +10,13 @@
 #define endCount 34
 
 SceneID scene[5];
-ObjectID start, gunsletter,notice,soundstick,message,home,change1,change2,telling;
+ObjectID start, gunsletter,notice,soundstick,safe,home,change1,change2,telling;
 ObjectID level[3], target[3], background[3];
 TimerID timer1, timer2, timer3, timer4, timer5;
 SoundID fire, fire2, unfire, changed, BGM;
 Second count2 = 0;
 int x_pos[3] = { 0,0,0 }, y_pos[3] = { 0,0,0 }, clearC[3] = { 0,0,0 };
-int score = 0, time2 =0, changeNum = 0;
+int score = 0, time2 =0, changeNum = 0,endIndex = 0,clickCount = 0;
 char L1[256],L2[256],L3[256],T[256],TIMEOUT[256];
 
 //소리 생성 함수
@@ -41,6 +41,7 @@ void gamestart(int SceneNumber, int x, int y, int index, TimerID timer) {
     x_pos[index] = rand() % x;
     y_pos[index] = rand() % y;
     time2 = 0;
+    score = 0;
     locateObject(target[index], scene[SceneNumber], x_pos[index], y_pos[index]);
     showObject(target[index]);
     if (changeNum == 0) {
@@ -59,14 +60,7 @@ void gamestart(int SceneNumber, int x, int y, int index, TimerID timer) {
 void checkend1() {
     if (score == endCount || count2 == endCount) {
         enterScene(scene[1]);
-        if (clearC[0] == 0) {
-            showMessage(L1);
-            showObject(level[1]);
-        }
-        else {
-            showMessage(T);
-        }
-        showObject(message);
+        showObject(safe);
         clearC[0]++;
         hideTimer();
         stopTimer(timer1);
@@ -76,8 +70,8 @@ void checkend1() {
         setTimer(timer5, 0);
         playSound(BGM);
         count2 = 0;
-        score = 0;
         time2 = 0;
+        endIndex = 0;
     }
 }
 
@@ -85,14 +79,7 @@ void checkend1() {
 void checkend2() {
     if (score == endCount || count2 == endCount) {
         enterScene(scene[1]);
-        if (clearC[1] == 0) {
-            showMessage(L2);
-            showObject(level[2]);
-        }
-        else {
-            showMessage(T);
-        }
-        showObject(message);
+        showObject(safe);
         clearC[1]++;
         hideTimer();
         stopTimer(timer3);
@@ -102,8 +89,8 @@ void checkend2() {
         setTimer(timer5, 0);
         playSound(BGM);
         count2 = 0;
-        score = 0;
         time2 = 0;
+        endIndex = 1;
     }
 }
 
@@ -111,13 +98,7 @@ void checkend2() {
 void checkend3() {
     if (score == endCount || count2 == endCount) {
         enterScene(scene[1]);
-        if (clearC[2] == 0) {
-            showMessage(L3);
-        }
-        else {
-            showMessage(T);
-        }
-        showObject(message);
+        showObject(safe);
         clearC[2]++;
         hideTimer();
         stopTimer(timer4);
@@ -127,8 +108,8 @@ void checkend3() {
         setTimer(timer5, 0);
         playSound(BGM);
         count2 = 0;
-        score = 0;
         time2 = 0;
+        endIndex = 2;
     }
 }
 
@@ -160,7 +141,6 @@ void modeChange(int x) {
         hideObject(change1);
         showObject(change2);
         changeNum = 1;
-        showObject(message);
         showMessage("타이머는 작동하나 상단에 표적을 맞힌\n 횟수가 표기됩니다.");
     }
     else {
@@ -168,7 +148,6 @@ void modeChange(int x) {
         hideObject(change2);
         showObject(change1);
         changeNum = 0;
-        showObject(message);
         showMessage("타이머가 작동하고 상단에 타이머가 표기됩니다.");
     }
 }
@@ -191,13 +170,12 @@ void Timeover(TimerID timer, int sec) {
     hideTimer();
     setTimer(timer, sec);
     stopTimer(timer);
-    showMessage(TIMEOUT);
+    showObject(safe);
     playSound(BGM);
-    showObject(message);
     setTimer(timer5, 0);
     count2 = 0;
     time2 = 0;
-    score = 0;
+    endIndex = 3;
 }
 
 //마우스 콜백 함수
@@ -208,14 +186,17 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
     }
     if (object == level[0]) {
         gamestart(2, 1080, 510, 0, timer1);
+        clickCount = 0;
         playSound(fire2);
     }
     if (object == level[1]) {
         gamestart(3, 1160, 590, 1, timer3);
+        clickCount = 0;
         playSound(fire2);
     }
     if (object == level[2]) {
         gamestart(4, 1240, 680, 2, timer4);
+        clickCount = 0;
         playSound(fire2);
     }
     if (object == target[0]) {
@@ -240,10 +221,6 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
     }
     if (object == soundstick) {
         playSound(fire);
-        hideObject(message);
-    }
-    if (object == home || object == notice || object == message) {
-        hideObject(message);
     }
     if (object == change1) {
         modeChange(1);
@@ -256,6 +233,44 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
     }
     if (object == start) {
         showMessage("게임 전 README 파일을 꼭 참고해주세요!");
+    }
+    if (object == safe) {
+        clickCount++;
+        if (clickCount == 3) {
+            hideObject(safe);
+            switch (endIndex)
+            {
+            case 0:
+                if (clearC[0] == 0) {
+                    showMessage(L1);
+                    showObject(level[1]);
+                }
+                else {
+                    showMessage(T);
+                }
+                break;
+            case 1:
+                if (clearC[1] == 0) {
+                    showMessage(L2);
+                    showObject(level[2]);
+                }
+                else {
+                    showMessage(T);
+                }
+                break;
+            case 2:
+                if (clearC[2] == 0) {
+                    showMessage(L3);
+                }
+                else {
+                    showMessage(T);
+                }
+                break;
+            case 3:
+                showMessage(TIMEOUT);
+                break;
+            }
+        }
     }
 }
 
@@ -326,9 +341,9 @@ void gameInit() {
     start = createObject("start.png", scene[0], 510, 70, true);
     scaleObject(start, 0.3f);
 
-    level[0] = createObject("level1.png", scene[1], 270, 100, true);
-    level[1] = createObject("level2.png", scene[1], 570, 100, false);
-    level[2] = createObject("level3.png", scene[1], 870, 100, false);
+    level[0] = createObject("level1.png", scene[1], 270, 20, true);
+    level[1] = createObject("level2.png", scene[1], 570, 20, false);
+    level[2] = createObject("level3.png", scene[1], 870, 20, false);
     notice = createObject("notice.png", scene[1], 20, 400, true);
     soundstick = createObject("stick.png", scene[1], 600, 288, true);
     scaleObject(soundstick, 0.03f);
@@ -345,7 +360,7 @@ void gameInit() {
     change1 = createObject("timermode.png", scene[1], 1150, 600, true);
     change2 = createObject("countmode.png", scene[1], 1150, 600, false);
 
-    message = createObject("message.png", scene[1], 0, 0, false);
+    safe = createObject("safe.png", scene[1], 0, 0, false);
     telling = createObject("telling.png", scene[0], 0, 0, true);
 
     //사운드 생성
