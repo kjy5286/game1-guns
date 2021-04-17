@@ -475,8 +475,6 @@ void gameInit() {
         }
     }
 
-
-
     //사운드 생성
     fire = createSound2("fire.mp3", false);
     fire2 = createSound2("fire2.mp3", false);
