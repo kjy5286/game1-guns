@@ -9,14 +9,15 @@
 #define L3Time 21
 #define endCount 34
 
+SceneID shop;
 SceneID scene[5];
-ObjectID start, gunsletter,notice,soundstick,safe,home,change1,change2,telling;
-ObjectID level[3], target[3], background[3];
+ObjectID start, gunsletter,notice,soundstick,safe,home,change1,change2,telling,shopButton,shopExit,pistol,riple,sniper;
+ObjectID level[3], target[3], background[3], select[3],selected[3];
 TimerID timer1, timer2, timer3, timer4, timer5;
-SoundID fire, fire2, unfire, changed, BGM;
+SoundID fire, fire2, unfire, changed, BGM,ripleSound, sniperSound;
 Second count2 = 0;
-int x_pos[3] = { 0,0,0 }, y_pos[3] = { 0,0,0 }, clearC[3] = { 0,0,0 };
-int score = 0, time2 =0, changeNum = 0,endIndex = 0,clickCount = 0;
+int x_pos[3] = { 0,0,0 }, y_pos[3] = { 0,0,0 }, clearC[3] = { 0,0,0 }, select_x_pos[3] = { 120,520,920 };
+int score = 0, time2 =0, changeNum = 0,endIndex = 0,clickCount = 0,gunSound = 0;
 char L1[256],L2[256],L3[256],T[256],TIMEOUT[256];
 
 //소리 생성 함수
@@ -61,6 +62,7 @@ void checkend1() {
     if (score == endCount || count2 == endCount) {
         enterScene(scene[1]);
         showObject(safe);
+        hideObject(shopButton);
         clearC[0]++;
         hideTimer();
         stopTimer(timer1);
@@ -80,6 +82,7 @@ void checkend2() {
     if (score == endCount || count2 == endCount) {
         enterScene(scene[1]);
         showObject(safe);
+        hideObject(shopButton);
         clearC[1]++;
         hideTimer();
         stopTimer(timer3);
@@ -99,6 +102,7 @@ void checkend3() {
     if (score == endCount || count2 == endCount) {
         enterScene(scene[1]);
         showObject(safe);
+        hideObject(shopButton);
         clearC[2]++;
         hideTimer();
         stopTimer(timer4);
@@ -171,6 +175,7 @@ void Timeover(TimerID timer, int sec) {
     setTimer(timer, sec);
     stopTimer(timer);
     showObject(safe);
+    hideObject(shopButton);
     playSound(BGM);
     setTimer(timer5, 0);
     count2 = 0;
@@ -202,17 +207,42 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
     if (object == target[0]) {
         checkend1();
         movetarget(2, 0, 1080, 510);
-        playSound(fire);
+        if (gunSound == 0) {
+            playSound(fire);
+        }
+        if (gunSound == 1) {
+            playSound(sniperSound);
+        }
+        if (gunSound == 2) {
+            playSound(ripleSound);
+        }
+
     }
     if (object == target[1]) {
         checkend2();
         movetarget(3, 1, 1160, 590);
-        playSound(fire);
+        if (gunSound == 0) {
+            playSound(fire);
+        }
+        if (gunSound == 1) {
+            playSound(sniperSound);
+        }
+        if (gunSound = 2) {
+            playSound(ripleSound);
+        }
     }
     if (object == target[2]) {
         checkend3();
         movetarget(4, 2, 1240, 680);
-        playSound(fire);
+        if (gunSound == 0) {
+            playSound(fire);
+        }
+        if (gunSound == 1) {
+            playSound(sniperSound);
+        }
+        if (gunSound = 2) {
+            playSound(ripleSound);
+        }
     }
     for (int i = 0; i < 3; i++) {
         if (object == background[i]) {
@@ -238,6 +268,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
         clickCount++;
         if (clickCount == 3) {
             hideObject(safe);
+            showObject(shopButton);
             switch (endIndex)
             {
             case 0:
@@ -271,6 +302,53 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
                 break;
             }
         }
+    }
+    if (object == shopButton) {
+        enterScene(shop);
+        showMessage("여기서 총을 바꿀 수 있습니다. \n총을 눌러 직접 쏘아 보세요!");
+    }
+    if (object == shopExit) {
+        enterScene(scene[1]);
+    }
+    for (int i = 0; i < 3; i++) {
+        if (object == select[i]) {
+            if (i == 0) {
+                hideObject(select[i]);
+                hideObject(selected[i + 1]);
+                hideObject(selected[i + 2]);
+                showObject(select[i + 1]);
+                showObject(select[i + 2]);
+                showObject(selected[i]);
+                gunSound = 2;
+            }
+            if (i == 1) {
+                hideObject(select[i]);
+                hideObject(selected[i - 1]);
+                hideObject(selected[i + 1]);
+                showObject(select[i - 1]);
+                showObject(select[i + 1]);
+                showObject(selected[i]);
+                gunSound = 1;
+            }
+            if (i == 2) {
+                hideObject(select[i]);
+                hideObject(selected[i -  1]);
+                hideObject(selected[i - 2]);
+                showObject(select[i - 1]);
+                showObject(select[i - 2]);
+                showObject(selected[i]);
+                gunSound = 0;
+            }
+        }
+    }
+    if (object == riple) {
+        playSound(ripleSound);
+    }
+    if (object == sniper) {
+        playSound(sniperSound);
+    }
+    if (object == pistol) {
+        playSound(fire);
     }
 }
 
@@ -321,6 +399,7 @@ void gameInit() {
     scene[2] = createScene("LEVEL-1", "guns3.png");
     scene[3] = createScene("LEVEL-2", "guns3.png");
     scene[4] = createScene("LEVEL-3", "guns3.png");
+    shop = createScene("SHOP", "finish.png");
 
     //타이머 생성
     timer1 = createTimer2(L1Time);
@@ -363,12 +442,49 @@ void gameInit() {
     safe = createObject("safe.png", scene[1], 0, 0, false);
     telling = createObject("telling.png", scene[0], 0, 0, true);
 
+    shopButton = createObject("shop.png", scene[1], 1030, 600, true);
+    scaleObject(shopButton, 0.05f);
+
+    shopExit = createObject("exit.png", shop, 1210, 650, true);
+    scaleObject(shopExit, 0.06f);
+
+    riple = createObject("riple.png", shop, 100, 300, true);
+    scaleObject(riple, 0.1f);
+
+    sniper = createObject("sniper.png", shop, 500, 300, true);
+    scaleObject(sniper, 0.1f);
+
+    pistol = createObject("pistol.png", shop, 900, 300, true);
+    scaleObject(pistol, 0.1f);
+
+    for (int i = 0; i < 3; i++) {
+        if (i == 0 || i == 1) {
+            select[i] = createObject("select.png", shop, select_x_pos[i], 250, true);
+        }
+        else {
+            select[i] = createObject("select.png", shop, select_x_pos[i], 250, false);
+        }
+    }
+    
+    for (int i = 0; i < 3; i++) {
+        if (i == 0 || i == 1) {
+            selected[i] = createObject("selected.png", shop, select_x_pos[i], 250, false);
+        }
+        else {
+            selected[i] = createObject("selected.png", shop, select_x_pos[i], 250, true);
+        }
+    }
+
+
+
     //사운드 생성
     fire = createSound2("fire.mp3", false);
     fire2 = createSound2("fire2.mp3", false);
     unfire = createSound2("unfire.mp3", false);
     changed = createSound2("changed.mp3", false);
     BGM = createSound2("Sinking.mp3", true);
+    ripleSound = createSound2("riple.mp3", false);
+    sniperSound = createSound2("sniper.mp3", false);
 }
 
 //메인 함수
