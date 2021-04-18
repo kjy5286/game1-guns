@@ -4,8 +4,8 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define L1Time 14
-#define L2Time 16
+#define L1Time 18
+#define L2Time 20
 #define L3Time 21
 #define endCount 34
 
