@@ -63,7 +63,6 @@ void checkend1() {
         enterScene(scene[1]);
         showObject(safe);
         hideObject(shopButton);
-        clearC[0]++;
         hideTimer();
         stopTimer(timer1);
         stopTimer(timer2);
@@ -83,7 +82,6 @@ void checkend2() {
         enterScene(scene[1]);
         showObject(safe);
         hideObject(shopButton);
-        clearC[1]++;
         hideTimer();
         stopTimer(timer3);
         stopTimer(timer2);
@@ -103,7 +101,6 @@ void checkend3() {
         enterScene(scene[1]);
         showObject(safe);
         hideObject(shopButton);
-        clearC[2]++;
         hideTimer();
         stopTimer(timer4);
         stopTimer(timer2);
@@ -227,7 +224,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
         if (gunSound == 1) {
             playSound(sniperSound);
         }
-        if (gunSound = 2) {
+        if (gunSound == 2) {
             playSound(ripleSound);
         }
     }
@@ -240,7 +237,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
         if (gunSound == 1) {
             playSound(sniperSound);
         }
-        if (gunSound = 2) {
+        if (gunSound == 2) {
             playSound(ripleSound);
         }
     }
@@ -275,6 +272,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
                 if (clearC[0] == 0) {
                     showMessage(L1);
                     showObject(level[1]);
+                    clearC[0]++;
                 }
                 else {
                     showMessage(T);
@@ -284,6 +282,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
                 if (clearC[1] == 0) {
                     showMessage(L2);
                     showObject(level[2]);
+                    clearC[1]++;
                 }
                 else {
                     showMessage(T);
@@ -292,6 +291,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
             case 2:
                 if (clearC[2] == 0) {
                     showMessage(L3);
+                    clearC[2]++;
                 }
                 else {
                     showMessage(T);
